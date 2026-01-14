@@ -24,7 +24,7 @@ def random_video():
     params = {
         "part": "contentDetails",
         "playlistId": PLAYLIST_ID,
-        "maxResults": 50,
+        "maxResults": 1000,
         "key": YOUTUBE_API_KEY
     }
     r = requests.get(url, params=params)
