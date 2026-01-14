@@ -58,7 +58,7 @@ def random_video():
     vr = requests.get(video_url, params=video_params)
     vdata = vr.json()
 
-    print(f"Video data: {vdata}")
+    # print(f"Video data: {vdata}")
 
     try:
         # duration comes in ISO 8601 format (PT4M13S etc)
@@ -73,8 +73,8 @@ def random_video():
     # 3. pick random timestamp
     timestamp = random.randint(0, max(0, total_seconds - 5))
 
-    print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}")
-    print(f"Video ID: {video_id}")
+    # print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}")
+    # print(f"Video ID: {video_id}")
     
     return jsonify({
         "videoId": video_id,
