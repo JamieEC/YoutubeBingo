@@ -15,7 +15,7 @@ def iso8601_to_seconds(duration):
 
 @app.route("/")
 def index():
-    print("Serving index.html", flush=True)
+    print("Serving index.html")
     return send_from_directory(".", "index.html")
 
 
@@ -43,11 +43,11 @@ def random_video():
             break
         page_token = data["nextPageToken"]
 
-    print(f"Fetched {len(video_ids)} video IDs from playlist.", flush=True)
+    print(f"Fetched {len(video_ids)} video IDs from playlist.")
 
     video_id = random.choice(video_ids)
 
-    print(f"Selected video ID: {video_id}", flush=True)
+    print(f"Selected video ID: {video_id}")
 
     # 2. optionally get video duration
     video_url = "https://www.googleapis.com/youtube/v3/videos"
@@ -59,7 +59,7 @@ def random_video():
     vr = requests.get(video_url, params=video_params)
     vdata = vr.json()
 
-    print(f"Video data: {vdata}", flush=True)
+    print(f"Video data: {vdata}")
 
     try:
         # duration comes in ISO 8601 format (PT4M13S etc)
@@ -74,8 +74,8 @@ def random_video():
     # 3. pick random timestamp
     timestamp = random.randint(0, max(0, total_seconds - 5))
 
-    print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}", flush=True)
-    print(f"Video ID: {video_id}", flush=True)
+    print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}")
+    print(f"Video ID: {video_id}")
     
     return jsonify({
         "videoId": video_id,
