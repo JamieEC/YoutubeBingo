@@ -68,6 +68,9 @@
       <button onclick="loadRandomVideo()">🔀</button>
     </div>
 
+    <!-- Touch overlay to capture touches over the player -->
+    <div id="touch-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;"></div>
+
     <!-- This is where the player will appear -->
     <div id="player"></div>
 
@@ -98,7 +101,7 @@
         }, 3000);
       });
 
-      document.addEventListener('touchstart', () => {
+      document.getElementById('touch-overlay').addEventListener('touchstart', () => {
         const topEl = document.getElementById('top');
         topEl.classList.add('visible');
         if (!isHoveringTop) {
