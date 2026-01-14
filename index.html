@@ -83,15 +83,10 @@
       document.addEventListener('mousemove', () => {
         const topEl = document.getElementById('top');
         topEl.classList.add('visible');
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(() => {
-          topEl.classList.remove('visible');
-        }, 3000);
       });
 
       document.getElementById('top').addEventListener('mouseenter', () => {
         clearTimeout(hideTimeout);
-        document.getElementById('top').classList.add('visible');
       });
 
       document.getElementById('top').addEventListener('mouseleave', () => {
