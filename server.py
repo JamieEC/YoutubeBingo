@@ -7,8 +7,8 @@ import sys
 
 app = Flask(__name__)
 PLAYLIST_ID = "PLHw2hnQN_c5apYwWirtCoNgY83i3yu7un"
-YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
-
+# YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
+YOUTUBE_API_KEY = "AIzaSyCohI6jQU5XHukgBZJ9ft1iTDLp6Opy0f8"
 
 def iso8601_to_seconds(duration):
     return int(isodate.parse_duration(duration).total_seconds())
@@ -17,7 +17,6 @@ def iso8601_to_seconds(duration):
 def index():
     print("Serving index.html")
     return send_from_directory(".", "index.html")
-
 
 @app.route("/random-video")
 def random_video():
