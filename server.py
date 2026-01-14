@@ -1,9 +1,10 @@
-YOUTUBE_API_KEY = 'AIzaSyC0MU5ZNzmt5hDjY_axv50BnEyVwnLOU8g'
+YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
 
 from flask import Flask, jsonify, send_from_directory
 import isodate
 import random
 import requests
+import os
 
 app = Flask(__name__)
 PLAYLIST_ID = "PLHw2hnQN_c5apYwWirtCoNgY83i3yu7un"
