@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Random YouTube Player</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        background: black;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      #top {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+      }
+      #countdown {
+        font-size: 32px;
+        font-weight: bold;
+        margin-right: 20px;
+        color: #ff6b6b;
+      }
+      button {
+        background: none;
+        border: 2px solid #ff6b6b;
+        color: #ff6b6b;
+        font-size: 24px;
+        padding: 10px 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      button:hover {
+        background: #ff6b6b;
+        color: black;
+        transform: scale(1.1);
+      }
+      #player {
+        flex: 1;
+      }
+      #player iframe {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+      <div id="countdown">30</div>
+      <button onclick="loadRandomVideo()">🔀</button>
+    </div>
+
+    <!-- This is where the player will appear -->
+    <div id="player"></div>
+
+    <!-- Load YouTube iframe API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+      let player;
+      let countdownInterval;
+      let timeLeft = 30;
+
+      function startCountdown(time = 30) {
+        timeLeft = time;
+        clearInterval(countdownInterval);
+        document.getElementById('countdown').textContent = timeLeft;
+        countdownInterval = setInterval(() => {
+          timeLeft--;
+          document.getElementById('countdown').textContent = timeLeft;
+          if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            loadRandomVideo();
+          }
+        }, 1000);
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+          startCountdown(timeLeft);
+        } else {
+          clearInterval(countdownInterval);
+        }
+      }
+
+      // Called automatically by the YouTube API
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '100%',
+          width: '100%',
+          videoId: '', // we’ll set this later
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            mute: 0        // stops browser blocking autoplay
+          },
+          events: {
+            'onReady': loadRandomVideo,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      function loadRandomVideo() {
+        fetch('/random-video')
+        .then(res => res.json())
+        .then(data => {
+      // stop previous video (optional but safer)
+        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+            player.stopVideo();
+        }
+
+        player.loadVideoById({
+        videoId: data.videoId,
+        startSeconds: data.timestamp
+      });
+      startCountdown(30);
+    });
+}
+
+    </script>
+  </body>
+</html>

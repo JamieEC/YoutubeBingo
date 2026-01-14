@@ -1,0 +1,36 @@
+<div id="player"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// YouTube API will call this when ready
+let player;
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '360',
+    width: '640',
+    videoId: '', // empty initially
+    playerVars: {
+      autoplay: 1,
+      controls: 1,
+      mute: 1  // avoids autoplay blocks
+    },
+    events: {
+      'onReady': loadRandomVideo
+    }
+  });
+}
+
+function loadRandomVideo() {
+  fetch('/random-video')
+    .then(r => r.json())
+    .then(data => {
+      const videoId = data.videoId;
+      const ts = data.timestamp;
+
+      player.loadVideoById(videoId);
+      player.seekTo(ts, true);
+      player.playVideo();
+    });
+}
+</script>

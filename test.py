@@ -1,0 +1,72 @@
+YOUTUBE_API_KEY = 'AIzaSyC0MU5ZNzmt5hDjY_axv50BnEyVwnLOU8g'
+
+from flask import Flask, jsonify
+import isodate
+import random
+import requests
+
+#app = Flask(__name__)
+PLAYLIST_ID = "PLHw2hnQN_c5apYwWirtCoNgY83i3yu7un"
+
+
+def iso8601_to_seconds(duration):
+    return int(isodate.parse_duration(duration).total_seconds())
+
+
+def random_video():
+    # 1. fetch videos from playlist
+    url = "https://www.googleapis.com/youtube/v3/playlistItems"
+    params = {
+        "part": "contentDetails",
+        "playlistId": PLAYLIST_ID,
+        "maxResults": 50,
+        "key": YOUTUBE_API_KEY
+    }
+    r = requests.get(url, params=params)
+    data = r.json()
+
+    video_ids = [
+        item["contentDetails"]["videoId"]
+        for item in data["items"]
+    ]
+
+    video_id = random.choice(video_ids)
+
+    print(f"Selected video ID: {video_id}")
+
+    # 2. optionally get video duration
+    video_url = "https://www.googleapis.com/youtube/v3/videos"
+    video_params = {
+        "part": "contentDetails",
+        "id": video_id,
+        "key": YOUTUBE_API_KEY
+    }
+    vr = requests.get(video_url, params=video_params)
+    vdata = vr.json()
+
+    print(f"Video data: {vdata}")
+
+    try:
+        # duration comes in ISO 8601 format (PT4M13S etc)
+        iso_duration = vdata["items"][0]["contentDetails"]["duration"]
+
+        # here you'd parse ISO 8601 -> seconds
+        total_seconds = iso8601_to_seconds(iso_duration)
+    except (KeyError, IndexError) as e:
+        print(f"Error retrieving duration: {e}")
+        return(random_video())  # Retry with another video
+    
+    # 3. pick random timestamp
+    timestamp = random.randint(0, max(0, total_seconds - 5))
+
+    print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}")
+    print(f"Video ID: {video_id}")
+
+    # Convert to JSON before using in Flask
+    return {
+        "videoId": video_id,
+        "timestamp": timestamp
+    }
+
+
+print(f'CONVERT TO JSON BEFORE USING FUNCTION IN FLASK: {random_video()}')
