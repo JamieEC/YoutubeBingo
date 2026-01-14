@@ -13,14 +13,7 @@ YOUTUBE_API_KEY = "AIzaSyCohI6jQU5XHukgBZJ9ft1iTDLp6Opy0f8"
 def iso8601_to_seconds(duration):
     return int(isodate.parse_duration(duration).total_seconds())
 
-@app.route("/")
-def index():
-    print("Serving index.html")
-    return send_from_directory(".", "index.html")
-
-@app.route("/random-video")
-def random_video():
-    # 1. fetch videos from playlist
+def fetch_playlist_videos():
     url = "https://www.googleapis.com/youtube/v3/playlistItems"
     params = {
         "part": "contentDetails",
@@ -41,9 +34,22 @@ def random_video():
         if "nextPageToken" not in data:
             break
         page_token = data["nextPageToken"]
-
+    
     print(f"Fetched {len(video_ids)} video IDs from playlist.")
+    return video_ids
 
+
+# Fetch video IDs at startup
+video_ids = fetch_playlist_videos()
+
+# Flask routes
+@app.route("/")
+def index():
+    print("Serving index.html")
+    return send_from_directory(".", "index.html")
+
+@app.route("/random-video")
+def random_video():
     video_id = random.choice(video_ids)
 
     print(f"Selected video ID: {video_id}")
