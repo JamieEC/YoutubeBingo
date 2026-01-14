@@ -87,6 +87,12 @@
       document.addEventListener('mousemove', () => {
         const topEl = document.getElementById('top');
         topEl.classList.add('visible');
+        if (!isHoveringTop) {
+          clearTimeout(hideTimeout);
+          hideTimeout = setTimeout(() => {
+            topEl.classList.remove('visible');
+          }, 3000);
+        }
       });
 
       document.getElementById('top').addEventListener('mouseenter', () => {
