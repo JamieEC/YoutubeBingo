@@ -91,6 +91,7 @@
 
       document.getElementById('top').addEventListener('mouseenter', () => {
         clearTimeout(hideTimeout);
+        document.getElementById('top').classList.add('visible');
       });
 
       document.getElementById('top').addEventListener('mouseleave', () => {
