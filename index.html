@@ -12,16 +12,6 @@
         color: white;
         font-family: Arial, sans-serif;
       }
-      #top-bar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: rgba(255, 107, 107, 0.5);
-        z-index: 10;
-        cursor: pointer;
-      }
       #top {
         position: absolute;
         top: 0;
@@ -37,7 +27,7 @@
         transition: transform 0.3s ease;
         z-index: 5;
       }
-      #top-bar:hover + #top, #top:hover {
+      #top.visible {
         transform: translateY(0);
       }
       #countdown {
@@ -71,7 +61,6 @@
     </style>
   </head>
   <body>
-    <div id="top-bar"></div>
     <div id="top">
       <div id="countdown">30</div>
       <button onclick="loadRandomVideo()">🔀</button>
@@ -87,6 +76,16 @@
       let player;
       let countdownInterval;
       let timeLeft = 30;
+      let hideTimeout;
+
+      document.addEventListener('mousemove', () => {
+        const topEl = document.getElementById('top');
+        topEl.classList.add('visible');
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(() => {
+          topEl.classList.remove('visible');
+        }, 3000);
+      });
 
       function startCountdown(time = 30) {
         timeLeft = time;
