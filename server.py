@@ -23,6 +23,7 @@ def fetch_playlist_videos():
     }
     video_ids = []
     page_token = ""
+    # This section itterates through all pages of the playlist
     while True:
         params["pageToken"] = page_token
         r = requests.get(url, params=params)
@@ -51,10 +52,9 @@ def index():
 @app.route("/random-video")
 def random_video():
     video_id = random.choice(video_ids)
-
     print(f"Selected video ID: {video_id}")
 
-    # 2. optionally get video duration
+    # Get video duration
     video_url = "https://www.googleapis.com/youtube/v3/videos"
     video_params = {
         "part": "contentDetails",
@@ -64,8 +64,6 @@ def random_video():
     vr = requests.get(video_url, params=video_params)
     vdata = vr.json()
 
-    # print(f"Video data: {vdata}")
-
     try:
         # duration comes in ISO 8601 format (PT4M13S etc)
         iso_duration = vdata["items"][0]["contentDetails"]["duration"]
@@ -73,15 +71,12 @@ def random_video():
         # here you'd parse ISO 8601 -> seconds
         total_seconds = iso8601_to_seconds(iso_duration) - 30  # buffer to avoid very end
     except (KeyError, IndexError) as e:
-        # print(f"Error retrieving duration: {e}")
+        print(f"Error retrieving duration: {e}")
         return(random_video())  # Retry with another video
     
-    # 3. pick random timestamp
+    # Pick random timestamp
     timestamp = random.randint(0, max(0, total_seconds - 5))
 
-    # print(f"Total seconds: {total_seconds}, Timestamp: {timestamp}")
-    # print(f"Video ID: {video_id}")
-    
     return jsonify({
         "videoId": video_id,
         "timestamp": timestamp
