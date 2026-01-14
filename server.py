@@ -41,7 +41,7 @@ def random_video():
             break
         page_token = data["nextPageToken"]
 
-    print(f"Fetched {len(video_ids)} video IDs from playlist.")
+    # print(f"Fetched {len(video_ids)} video IDs from playlist.")
 
     video_id = random.choice(video_ids)
 
