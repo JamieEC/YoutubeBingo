@@ -21,34 +21,6 @@
         background: rgba(255, 107, 107, 0.5);
         z-index: 10;
         cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .grab-bar {
-        display: none;
-        width: 40px;
-        height: 3px;
-        background: #ff6b6b;
-        position: relative;
-      }
-      .grab-bar::before,
-      .grab-bar::after {
-        content: '';
-        position: absolute;
-        width: 40px;
-        height: 3px;
-        background: #ff6b6b;
-        left: 0;
-      }
-      .grab-bar::before {
-        top: -6px;
-      }
-      .grab-bar::after {
-        top: 6px;
-      }
-      #top-bar:hover .grab-bar {
-        display: block;
       }
       #top {
         position: absolute;
@@ -99,9 +71,7 @@
     </style>
   </head>
   <body>
-    <div id="top-bar">
-      <div class="grab-bar"></div>
-    </div>
+    <div id="top-bar"></div>
     <div id="top">
       <div id="countdown">30</div>
       <button onclick="loadRandomVideo()">🔀</button>
