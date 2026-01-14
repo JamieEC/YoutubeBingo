@@ -60,14 +60,6 @@
         width: 100%;
         height: 100%;
       }
-
-      @media (max-width: 768px) {
-        #top {
-          transform: translateY(0) !important;
-          transition: none !important;
-          width: 100%;
-        }
-      }
     </style>
   </head>
   <body>
@@ -87,26 +79,43 @@
       let countdownInterval;
       let timeLeft = 30;
       let hideTimeout;
+      let isHoveringTop = false;
 
-      function hideTopBar() {
-        document.getElementById('top').classList.remove('visible');
-      }
-
-      function showTopBarAndResetInactivityTimeout() {
+      document.addEventListener('mousemove', () => {
         const topEl = document.getElementById('top');
         topEl.classList.add('visible');
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(hideTopBar, 3000);
-      }
-
-      document.addEventListener('mousemove', showTopBarAndResetInactivityTimeout);
-      document.addEventListener('touchstart', showTopBarAndResetInactivityTimeout);
+      });
 
       document.getElementById('top').addEventListener('mouseenter', () => {
+        isHoveringTop = true;
         clearTimeout(hideTimeout);
       });
 
       document.getElementById('top').addEventListener('mouseleave', () => {
+        isHoveringTop = false;
+        hideTimeout = setTimeout(() => {
+          document.getElementById('top').classList.remove('visible');
+        }, 3000);
+      });
+
+      document.addEventListener('touchstart', () => {
+        const topEl = document.getElementById('top');
+        topEl.classList.add('visible');
+        if (!isHoveringTop) {
+          clearTimeout(hideTimeout);
+          hideTimeout = setTimeout(() => {
+            topEl.classList.remove('visible');
+          }, 3000);
+        }
+      });
+
+      document.getElementById('top').addEventListener('touchstart', () => {
+        isHoveringTop = true;
+        clearTimeout(hideTimeout);
+      });
+
+      document.getElementById('top').addEventListener('touchend', () => {
+        isHoveringTop = false;
         hideTimeout = setTimeout(() => {
           document.getElementById('top').classList.remove('visible');
         }, 3000);
