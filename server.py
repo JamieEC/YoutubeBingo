@@ -15,6 +15,7 @@ def iso8601_to_seconds(duration):
 
 @app.route("/")
 def index():
+    print("Serving index.html", flush=True)
     return send_from_directory(".", "index.html")
 
 
