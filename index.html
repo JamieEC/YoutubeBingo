@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Random YouTube Player</title>
+    <title>Nevo Bingo</title>
     <style>
       body {
         position: relative;
@@ -80,10 +80,19 @@
       let timeLeft = 30;
       let hideTimeout;
 
-      document.addEventListener('mousemove', () => {
+      function hideTopBar() {
+        document.getElementById('top').classList.remove('visible');
+      }
+
+      function showTopBarAndResetInactivityTimeout() {
         const topEl = document.getElementById('top');
         topEl.classList.add('visible');
-      });
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(hideTopBar, 3000);
+      }
+
+      document.addEventListener('mousemove', showTopBarAndResetInactivityTimeout);
+      document.addEventListener('touchstart', showTopBarAndResetInactivityTimeout);
 
       document.getElementById('top').addEventListener('mouseenter', () => {
         clearTimeout(hideTimeout);
