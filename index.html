@@ -4,8 +4,7 @@
     <title>Random YouTube Player</title>
     <style>
       body {
-        display: flex;
-        flex-direction: column;
+        position: relative;
         height: 100vh;
         margin: 0;
         padding: 0;
@@ -13,14 +12,33 @@
         color: white;
         font-family: Arial, sans-serif;
       }
+      #top-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: rgba(255, 107, 107, 0.5);
+        z-index: 10;
+        cursor: pointer;
+      }
       #top {
-        flex-shrink: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 20px;
         background: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(5px);
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 5;
+      }
+      #top-bar:hover + #top, #top:hover {
+        transform: translateY(0);
       }
       #countdown {
         font-size: 32px;
@@ -44,7 +62,7 @@
         transform: scale(1.1);
       }
       #player {
-        flex: 1;
+        height: 100%;
       }
       #player iframe {
         width: 100%;
@@ -53,6 +71,7 @@
     </style>
   </head>
   <body>
+    <div id="top-bar"></div>
     <div id="top">
       <div id="countdown">30</div>
       <button onclick="loadRandomVideo()">🔀</button>
