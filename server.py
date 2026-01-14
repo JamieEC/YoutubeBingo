@@ -24,16 +24,22 @@ def random_video():
     params = {
         "part": "contentDetails",
         "playlistId": PLAYLIST_ID,
-        "maxResults": 1000,
+        "maxResults": 50,  # YouTube API max is 50 per page
         "key": YOUTUBE_API_KEY
     }
-    r = requests.get(url, params=params)
-    data = r.json()
-
-    video_ids = [
-        item["contentDetails"]["videoId"]
-        for item in data["items"]
-    ]
+    video_ids = []
+    page_token = ""
+    while True:
+        params["pageToken"] = page_token
+        r = requests.get(url, params=params)
+        data = r.json()
+        video_ids.extend([
+            item["contentDetails"]["videoId"]
+            for item in data["items"]
+        ])
+        if "nextPageToken" not in data:
+            break
+        page_token = data["nextPageToken"]
 
     video_id = random.choice(video_ids)
 
