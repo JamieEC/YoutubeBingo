@@ -69,13 +69,13 @@ def random_video():
         iso_duration = vdata["items"][0]["contentDetails"]["duration"]
 
         # here you'd parse ISO 8601 -> seconds
-        total_seconds = iso8601_to_seconds(iso_duration) - 30  # buffer to avoid very end
+        total_seconds = iso8601_to_seconds(iso_duration)  # buffer to avoid very end
     except (KeyError, IndexError) as e:
         print(f"Error retrieving duration: {e}")
         return(random_video())  # Retry with another video
     
     # Pick random timestamp
-    timestamp = random.randint(0, max(0, total_seconds - 5))
+    timestamp = random.randint(120, max(0, total_seconds - 30))
 
     return jsonify({
         "videoId": video_id,
