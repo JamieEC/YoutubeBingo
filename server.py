@@ -6,8 +6,8 @@ import os
 import sys
 
 app = Flask(__name__)
-# PLAYLIST_ID = "PLHw2hnQN_c5apYwWirtCoNgY83i3yu7un" # Initial
-PLAYLIST_ID = "PLYmHp8za33TxRaLpsed8olerJjOGRScKN" # Updated playlist with more videos
+PLAYLIST_ID = "PLHw2hnQN_c5apYwWirtCoNgY83i3yu7un" # Initial
+# PLAYLIST_ID = "PLYmHp8za33TxRaLpsed8olerJjOGRScKN" # Updated playlist with more videos
 YOUTUBE_API_KEY = os.environ["YOUTUBE_API_KEY"]
 
 def iso8601_to_seconds(duration):
